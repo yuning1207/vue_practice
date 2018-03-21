@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>Helloworld</title>
+</head>
+
+<body>
+    <h1>Hello World</h1>
+    <hr>
+    <div id="app">
+        <p title={{title}}>df</p>
+        <p v-bind:title="title">title属性绑定，html属性不能使用双大括号形式绑定，只能使用v-bind指令</p>
+        <p :title="title">“:” 是 “v-bind” 的快捷方式</p>
+        <div>{{title}}</div>
+        <textarea v-model='title'></textarea>
+        <input v-bind:value='title' v-on:input='title=$event.target.value'>
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                title: 'hello Vue!'
+            }
+        })
+    </script>
+</body>
+</html
