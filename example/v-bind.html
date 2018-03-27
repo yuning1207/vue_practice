@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>v-bind</title>
+    <style>
+        .a {
+            color: red;
+        }
+        
+        .b {
+            font-size: 150%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>v-bind</h1>
+    <hr>
+    <div id="app">
+        <p :class='a'>直接绑定class</p>
+        <p :class='classname'>数组绑定class</p>
+        <p :class='[a,b]'>绑定class中的数组</p>
+        <p :class='{a:isok}'>绑定class中的判断</p>
+        <p :class='isok?a:b'>绑定class中的三元运算符</p>
+        <div>
+            <input type="checkbox" id="isok" v-model='isok'>
+            <label for="isok">isok={{isok}}</label>
+        </div>
+        <p :style='{color:red}'>绑定style</p>
+        <p :style='styleobject'>对象绑定style</p>
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                a: 'a',
+                b: 'b',
+                classname: ['a', 'b'],
+                isok: false,
+                red: 'red',
+                styleobject: {
+                    color: 'green',
+                    fontSize: '150%'
+                }
+            }
+        })
+    </script>
+</body>
+</html
