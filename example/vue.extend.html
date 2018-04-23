@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>Vue.extend</title>
+</head>
+
+<body>
+    <h1>Vue.extend</h1>
+    <hr>
+    <div id="app">
+        <author></author>
+        <div id="yu"></div>
+    </div>
+
+    <script type="text/javascript">
+        var authormes = Vue.extend({
+            template: "<p><a :href='authorUrl'>{{authorName}}</a></p>",
+            data: function() {
+                return {
+                    authorName: 'yuning',
+                    authorUrl: 'http://baidu.com'
+                }
+            }
+        });
+        new authormes().$mount('author');
+        new authormes().$mount('#yu');
+    </script>
+</body>
+</html
