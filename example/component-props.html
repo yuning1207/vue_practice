@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>Vue组件2</title>
+</head>
+
+<body>
+    <h1>Vue组件2</h1>
+    <hr>
+    <div id="app">
+        <ning v-bind:here='message'></ning>
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: '西安'
+            },
+            //局部注册
+            components: {
+                'ning': {
+                    template: `<div style='color:green'>鱼宁在{{here}}</div>`,
+                    props: ['here']
+                }
+            }
+        });
+    </script>
+</body>
+</html

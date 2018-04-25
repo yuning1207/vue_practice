@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>Vue生命周期</title>
+</head>
+
+<body>
+    <h1>Vue生命周期</h1>
+    <hr>
+    <div id="app">
+    </div>
+    <!-- <template id="dd2">
+        <h1 style='color:red'>我的template标签模板</h1>
+    </template> -->
+    <script type="x-template" id="dd3">
+        <h1 style='color:red'>我的script标签模板</h1>
+    </script>
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                count: 1
+            },
+            // template: `<h1 style='color:red'>我的选项模板</h1>`
+            // template: "#dd2"
+            template: "#dd3"
+        });
+    </script>
+</body>
+</html
