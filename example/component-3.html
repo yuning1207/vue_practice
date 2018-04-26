@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>Vue父子组件</title>
+</head>
+
+<body>
+    <h1>Vue父子组件</h1>
+    <hr>
+    <div id="app">
+        <china></china>
+    </div>
+
+    <script type="text/javascript">
+        var si = {
+            template: `<p>sichuan have a panda</p>`
+        };
+        var china = {
+            template: `<div>
+                    <p>china have a sichuan</p>
+                    <si></si>
+                    </div>`,
+            //子组件必须是父组件的子标签
+            components: {
+                "si": si
+            }
+        };
+        var app = new Vue({
+            el: '#app',
+            //局部注册
+            components: {
+                "china": china
+            }
+        });
+    </script>
+</body>
+</html
