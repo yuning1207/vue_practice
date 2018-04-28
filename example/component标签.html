@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>component标签</title>
+</head>
+
+<body>
+    <h1>component标签</h1>
+    <hr>
+    <div id="app">
+        <component v-bind:is='who'></component>
+        <button @click='changecomponent'>changecomponent</button>
+    </div>
+
+    <script type="text/javascript">
+        var component1 = {
+            template: `<p style='color:red'>我是component1</p>`
+        };
+        var component2 = {
+            template: `<p style='color:green'>我是component2</p>`
+        };
+        var component3 = {
+            template: `<p style='color:pink'>我是component3</p>`
+        };
+        var app = new Vue({
+            el: '#app',
+            //局部注册
+            data: {
+                who: 'component1'
+            },
+            components: {
+                'component1': component1,
+                'component2': component2,
+                'component3': component3
+            },
+            methods: {
+                changecomponent: function() {
+                    if (this.who == 'component1') {
+                        this.who = 'component2';
+                    } else if (this.who == 'component2') {
+                        this.who = 'component3';
+                    } else {
+                        this.who = 'component1';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html

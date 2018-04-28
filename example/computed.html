@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <title>computed选项</title>
+</head>
+
+<body>
+    <h1>computed选项</h1>
+    <hr>
+    <div id="app">
+        <p>{{newprice}}</p>
+        <ul>
+            <li v-for='item in reversenews'>{{item.title}}-{{item.date}}</li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        var vue = new Vue({
+            el: '#app',
+            data: {
+                price: 100,
+                newslist: [{
+                    title: '习近平总书记湖北之行第三天',
+                    date: '2018/4/20'
+                }, {
+                    title: '习近平总书记考察长江 勉励大家守护好一江碧水',
+                    date: '2018/4/21'
+                }, {
+                    title: '汲取中印文明“和”的养分（钟声）',
+                    date: '2018/4/22'
+                }, {
+                    title: '用高质量发展守护一江碧水（评论员观察）',
+                    date: '2018/4/23'
+                }, ]
+            },
+            computed: {
+                newprice: function() {
+                    return '$' + this.price + '元';
+                },
+                reversenews: function() {
+                    return this.newslist.reverse();
+                }
+            }
+        })
+    </script>
+</body>
+</html
