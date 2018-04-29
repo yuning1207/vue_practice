@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <script type="text/javascript" src="../assets/js/jquery-3.3.1.min.js"></script>
+    <title>实例方法</title>
+</head>
+
+<body>
+    <h1>实例方法</h1>
+    <hr>
+    <div id="app">
+
+    </div>
+    <button onclick='destroy()'>卸载</button>
+    <button onclick='update()'>更新</button>
+    <button onclick='tick()'>数据被修改</button>
+    <script type="text/javascript">
+        var vm = Vue.extend({
+            template: '<p>{{message}}</p>',
+            data: function() {
+                return {
+                    message: 'i am yuning'
+                }
+            },
+            mounted: function() {
+                console.log('被挂载了');
+            },
+            destroyed: function() {
+                console.log('被销毁');
+            },
+            updated: function() {
+                console.log('被更新');
+            }
+        });
+        var vue = new vm().$mount('#app');
+
+        function destroy() {
+            vue.$destroy();
+        };
+
+        function update() {
+            vue.$forceUpdate();
+        };
+
+        function tick() {
+            vue.message = 'update message';
+            vue.$nextTick(function() {
+                console.log('数据更新后我就被调用了');
+            });
+        }
+    </script>
+</body>
+</html

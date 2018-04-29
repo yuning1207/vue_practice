@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../assets/js/vue.min.js"></script>
+    <script type="text/javascript" src="../assets/js/jquery-3.3.1.min.js"></script>
+    <title>实例方法</title>
+</head>
+
+<body>
+    <h1>实例方法</h1>
+    <hr>
+    <div id="app">
+        <yuning>
+            <span slot='url'>{{message.url}}</span>
+            <span slot='name'>{{message.name}}</span>
+            <span slot='skill'>{{message.skill}}</span>
+        </yuning>
+    </div>
+    <template id="tep">
+        <div>
+            <p>博客地址：<slot name='url'></slot></p>
+            <p>网名：<slot name='name'></slot></p>
+            <p>技术类型：<slot name='skill'></slot></p>
+        </div>
+    </template>
+    <script type="text/javascript">
+        var temp = {
+            template: '#tep'
+        };
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: {
+                    url: 'yuning.com',
+                    name: '鱼宁',
+                    skill: 'web前端'
+                }
+            },
+            components: {
+                'yuning': temp
+            }
+        });
+    </script>
+</body>
+</html
