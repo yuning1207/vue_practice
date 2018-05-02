@@ -2,7 +2,9 @@
   <div id="app">
     <img src="./assets/logo.png">
     <router-link to='/'>首页</router-link>|
-    <router-link to='/hi'>hi页面</router-link>
+    <router-link to='/hi'>hi页面</router-link>|
+    <router-link to='/hi/hi1'>hi1页面</router-link>|
+    <router-link to='/hi/hi2'>hi2页面</router-link>
     <router-view/>
   </div>
 </template>
