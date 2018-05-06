@@ -12,6 +12,14 @@ export default{
         return {
             msg:'i am params'
         }
+    },
+    beforeRouteEnter:(to,from,next)=>{
+        console.log('我准备进入params路由了');
+        next();
+    },
+    beforeRouteLeave:(to,from,next)=>{
+        console.log('我准备离开params路由了');
+        next();
     }
 }
 </script>

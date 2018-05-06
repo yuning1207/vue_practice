@@ -4,10 +4,12 @@ import HelloWorld from '@/components/HelloWorld'
 import hi1 from '@/components/hi1'
 import hi2 from '@/components/hi2'
 import params from '@/components/params'
+import error from '@/components/Error'
 
 Vue.use(Router)
 
 export default new Router({
+    mode: 'history',
     routes: [{
             path: '/',
             components: {
@@ -26,7 +28,12 @@ export default new Router({
         },
         {
             path: '/params/:id(\\d+)/:title',
-            component: params
+            component: params,
+            // beforeEnter: (to, from, next) => {
+            //     console.log(to);
+            //     console.log(from);
+            //     next({ path: '/' });
+            // }
         },
         {
             path: '/goHome',
@@ -34,12 +41,16 @@ export default new Router({
         },
         {
             path: '/goParams/:id(\\d+)/:title',
-            redirect: '/params/:id(\\d+)/:title'
+            redirect: '/params/:id(\\d+)/:title',
         },
         {
             path: '/hi1',
             component: hi1,
             alias: '/yuning'
+        },
+        {
+            path: '*',
+            component: error
         }
     ]
 })

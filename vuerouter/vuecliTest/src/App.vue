@@ -1,13 +1,15 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png"><br>
+    <button @click="goback">后退</button> <button @click="go">前进</button> <button @click="gohome">回到首页</button><br>
     <router-link to='/'>首页</router-link>|
     <router-link to='/hi'>hi页面</router-link>|
     <router-link to='/params/125/yuning is a good girl'>params页面</router-link>|
     <router-link to='/goHome'>goHome页面</router-link>|
     <router-link to='/goparams/886/i am yuning'>goParams页面</router-link>|
-    <router-link to='/hi1'>hi1页面</router-link>
-    <router-link to='/yuning'>yuning页面</router-link>
+    <router-link to='/hi1'>hi1页面</router-link>|
+    <router-link to='/yuning'>yuning页面</router-link>|
+    <router-link to='/4651654'>lalal</router-link>
     <transition name="fade" mode="out-in">
       <router-view/>
     </transition>
@@ -19,7 +21,18 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods:{
+    goback(){
+      this.$router.go(-1);
+    },
+    go(){
+      this.$router.go(1);
+    },
+    gohome(){
+      this.$router.push('/');
+    }
+  }
 }
 </script>
 
