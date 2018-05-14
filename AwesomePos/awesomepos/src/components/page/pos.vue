@@ -41,18 +41,36 @@
         </div>
         <template>
           <el-tabs class="goodclass">
-            <el-tab-pane label='汉堡' class="hanbao">
-              <ul>
+            <el-tab-pane label='汉堡'>
+              <ul class="list">
                 <li v-for="goods in type0Goods">
                   <span><img :src="goods.goodsImg"/></span>
                   <span>{{goods.goodsName}}</span>
-                  <span>{{goods.price}}</span>
+                  <span>￥{{goods.price}}元</span>
                 </li>
               </ul>
             </el-tab-pane>
-            <el-tab-pane label='小食'>小食</el-tab-pane>
-            <el-tab-pane label='饮料'>饮料</el-tab-pane>
-            <el-tab-pane label='套餐'>套餐</el-tab-pane>
+            <el-tab-pane label='小食'><ul class="list">
+                <li v-for="goods in type1Goods">
+                  <span><img :src="goods.goodsImg"/></span>
+                  <span>{{goods.goodsName}}</span>
+                  <span>￥{{goods.price}}元</span>
+                </li>
+              </ul></el-tab-pane>
+            <el-tab-pane label='饮料'><ul class="list">
+                <li v-for="goods in type2Goods">
+                  <span><img :src="goods.goodsImg"/></span>
+                  <span>{{goods.goodsName}}</span>
+                  <span>￥{{goods.price}}元</span>
+                </li>
+              </ul></el-tab-pane>
+            <el-tab-pane label='套餐'><ul class="list">
+                <li v-for="goods in type3Goods">
+                  <span><img :src="goods.goodsImg"/></span>
+                  <span>{{goods.goodsName}}</span>
+                  <span>￥{{goods.price}}元</span>
+                </li>
+              </ul></el-tab-pane>
           </el-tabs>
         </template>
       </el-col>
@@ -61,6 +79,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'pos',
   data(){
@@ -88,108 +107,36 @@ export default {
           price:5
         },
       ],
-      oftenGoods:[
-        {
-              goodsId:1,
-              goodsName:'香辣鸡腿堡',
-              price:18
-          }, {
-              goodsId:2,
-              goodsName:'田园鸡腿堡',
-              price:15
-          }, {
-              goodsId:3,
-              goodsName:'和风汉堡',
-              price:15
-          }, {
-              goodsId:4,
-              goodsName:'快乐全家桶',
-              price:80
-          }, {
-              goodsId:5,
-              goodsName:'脆皮炸鸡腿',
-              price:10
-          }, {
-              goodsId:6,
-              goodsName:'魔法鸡块',
-              price:20
-          }, {
-              goodsId:7,
-              goodsName:'可乐大杯',
-              price:10
-          }, {
-              goodsId:8,
-              goodsName:'雪顶咖啡',
-              price:18
-          }, {
-              goodsId:9,
-              goodsName:'大块鸡米花',
-              price:15
-          }, {
-              goodsId:20,
-              goodsName:'香脆鸡柳',
-              price:17
-          }
-      ],
-      type0Goods:[
-          {
-              goodsId:1,
-              goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos001.jpg",
-              goodsName:'香辣鸡腿堡',
-              price:18
-          }, {
-              goodsId:2,
-              goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos002.jpg",
-              goodsName:'田园鸡腿堡',
-              price:15
-          }, {
-              goodsId:3,
-              goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos004.jpg",
-              goodsName:'和风汉堡',
-              price:15
-          }, {
-              goodsId:4,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos003.jpg",
-              goodsName:'快乐全家桶',
-              price:80
-          }, {
-              goodsId:5,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos003.jpg",
-              goodsName:'脆皮炸鸡腿',
-              price:10
-          }, {
-              goodsId:6,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos004.jpg",
-              goodsName:'魔法鸡块',
-              price:20
-          }, {
-              goodsId:7,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos001.jpg",
-              goodsName:'可乐大杯',
-              price:10
-          }, {
-              goodsId:8,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos003.jpg",
-              goodsName:'雪顶咖啡',
-              price:18
-          }, {
-              goodsId:9,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos002.jpg",
-              goodsName:'大块鸡米花',
-              price:15
-          }, {
-              goodsId:20,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos002.jpg",
-              goodsName:'香脆鸡柳',
-              price:17
-          }
-          
-      ],
+      oftenGoods:[],
+      type0Goods:[],
+      type1Goods:[],
+      type2Goods:[],
+      type3Goods:[],
     }
   },
   mounted:function(){
     var orderHeight=document.body.clientHeight;
     document.getElementById('order_list').style.height=orderHeight+'px';
+  },
+  created:function(){
+    axios.get('http://jspang.com/DemoApi/oftenGoods.php').then(reponse=>{
+      console.log(reponse);
+      this.oftenGoods=reponse.data;
+    }).catch(error=>{
+      alert('网络错误，不能访问');
+      console.log(error);
+    });
+    axios.get('http://jspang.com/DemoApi/typeGoods.php').then(reponse=>{
+      console.log(reponse);
+      this.type0Goods=reponse.data[0];
+      this.type1Goods=reponse.data[1];
+      this.type2Goods=reponse.data[2];
+      this.type3Goods=reponse.data[3];
+    }).catch(error=>{
+      console.log(error);
+      alert('网络错误，不能访问');
+    })
+    
   }
 }
 </script>
@@ -221,6 +168,7 @@ padding: 10px;
   border: 1px solid #E5E9F2;
   background-color: #fff;
   float: left;
+
 }
 .often_goods ul li span:nth-of-type(2){
   color: #58B7FF; 
@@ -228,25 +176,34 @@ padding: 10px;
 .el-tab-pane{
   margin-left: 10px;
 }
-.goodclass .hanbao ul{
+.goodclass .list{
   overflow: hidden;
+  padding: 18px;
 }
-.goodclass .hanbao ul li{
+.goodclass .list li{
   float: left;
   list-style: none;
   width:23%;
   background-color: #fff;
   padding: 2px;
-  margin: 8px;
+  margin: 2px;
   border:1px solid #E5E9F2;
-  height: auto;
+  text-align: left;
+  overflow: hidden;
 }
-.goodclass .hanbao ul li img{
-  width: 40%;
-  
-}
-.goodclass .hanbao ul li span{
+.goodclass .list li span{
   display: block;
   float: left;
+}
+.goodclass .list li>span{
+  width: 40%;
+  margin-right: 10px;  
+}
+.goodclass .list li img{
+  width: 100%;
+}
+.goodclass .list li span:nth-of-type(2){
+  margin: 10px 0 15px 0;
+  color:brown;
 }
 </style>
