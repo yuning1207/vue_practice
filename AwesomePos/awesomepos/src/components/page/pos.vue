@@ -12,15 +12,18 @@
                   <el-table-column prop='price' label='金额' width='70' align='center'></el-table-column>
                   <el-table-column label='操作' fixed='right' width='100' align='center'>
                     <template slot-scope="scope">
-                      <el-button type='text'>删除</el-button>
-                      <el-button type='text'>增加</el-button>
+                      <el-button type='text' @click="reduceOrder(scope.row)">删除</el-button>
+                      <el-button type='text' @click="addOrder(scope.row)">增加</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
+                <div class="total">
+                  <small>数量：</small><span>{{totalcount}}</span><small>金额：</small><span>{{totalmoney}}元</span>
+                </div>
                 <div class="order_btn">
                   <el-button type='warning'>挂单</el-button>
-                  <el-button type='danger'>删除</el-button>
-                  <el-button type='success'>结账</el-button>
+                  <el-button type='danger' @click="removetotal">删除</el-button>
+                  <el-button type='success' @click="checkout">结账</el-button>
                 </div>    
               </template>
             </el-tab-pane>
@@ -33,7 +36,7 @@
         <div class="often_goods">
           <div>常用商品</div>
           <ul>
-            <li v-for="goods in oftenGoods">
+            <li v-for="goods in oftenGoods" @click="addOrder(goods)">
               <span>{{goods.goodsName}}</span>
               <span>￥{{goods.price}}元</span>
             </li>
@@ -43,7 +46,7 @@
           <el-tabs class="goodclass">
             <el-tab-pane label='汉堡'>
               <ul class="list">
-                <li v-for="goods in type0Goods">
+                <li v-for="goods in type0Goods" @click="addOrder(goods)">
                   <span><img :src="goods.goodsImg"/></span>
                   <span>{{goods.goodsName}}</span>
                   <span>￥{{goods.price}}元</span>
@@ -51,21 +54,21 @@
               </ul>
             </el-tab-pane>
             <el-tab-pane label='小食'><ul class="list">
-                <li v-for="goods in type1Goods">
+                <li v-for="goods in type1Goods" @click="addOrder(goods)">
                   <span><img :src="goods.goodsImg"/></span>
                   <span>{{goods.goodsName}}</span>
                   <span>￥{{goods.price}}元</span>
                 </li>
               </ul></el-tab-pane>
             <el-tab-pane label='饮料'><ul class="list">
-                <li v-for="goods in type2Goods">
+                <li v-for="goods in type2Goods" @click="addOrder(goods)">
                   <span><img :src="goods.goodsImg"/></span>
                   <span>{{goods.goodsName}}</span>
                   <span>￥{{goods.price}}元</span>
                 </li>
               </ul></el-tab-pane>
             <el-tab-pane label='套餐'><ul class="list">
-                <li v-for="goods in type3Goods">
+                <li v-for="goods in type3Goods" @click="addOrder(goods)">
                   <span><img :src="goods.goodsImg"/></span>
                   <span>{{goods.goodsName}}</span>
                   <span>￥{{goods.price}}元</span>
@@ -84,34 +87,68 @@ export default {
   name: 'pos',
   data(){
     return {
-      tableData:
-      [
-        {
-          goodsName:'可口可乐',
-          count:1,
-          price:8
-        },
-        {
-          goodsName:'香辣鸡腿堡',
-          count:1,
-          price:15
-        },
-        {
-          goodsName:'爱心薯条',
-          count:1,
-          price:8
-        },
-        {
-          goodsName:'甜筒',
-          count:1,
-          price:5
-        },
-      ],
+      tableData:[],
       oftenGoods:[],
       type0Goods:[],
       type1Goods:[],
       type2Goods:[],
       type3Goods:[],
+      totalcount:0,
+      totalmoney:0
+    }
+  },
+  methods:{
+    addOrder:function(goods){
+      //判断tableData中是否有该商品
+      let ishave=false;
+      for(var i=0,len=this.tableData.length;i<len;i++){
+        if(goods.goodsId==this.tableData[i].goodsId){
+          ishave=true;
+        }
+      };
+      //根据ishave的值来操作
+      if(ishave){
+        this.tableData[i-1].count++;
+        this.totalcount++;
+        this.totalmoney+=goods.price;
+      }else{
+        var newgood={goodsId:goods.goodsId,goodsName:goods.goodsName,price:goods.price,count:1};
+        this.tableData.push(newgood);
+        this.totalcount+=1;
+        this.totalmoney+=goods.price;
+      }
+    },
+    reduceOrder:function(goods){
+      for(var i=0,len=this.tableData.length;i<len;i++){
+        if(goods.goodsId==this.tableData[i].goodsId){
+          break;
+        }
+      };             
+      if(goods.count==1){
+        this.tableData.splice(i,1);
+      }else{
+        this.tableData[i].count--;  
+      }      
+      this.totalcount--;
+      this.totalmoney-=goods.price;
+    },
+    removetotal:function(){
+      this.tableData=[];
+      this.totalcount=0;
+      this.totalmoney=0;
+    },
+    checkout:function(){
+      if(this.totalcount!=0){
+        this.totalcount=0;
+        this.totalmoney=0;
+        this.tableData=[];
+        this.$message({
+          message:'结账成功，感谢你又为店里出了一份力！',
+          type:'success'
+        });
+      }else{
+        this.$message.error('不能空结！');
+      }
     }
   },
   mounted:function(){
@@ -120,14 +157,12 @@ export default {
   },
   created:function(){
     axios.get('http://jspang.com/DemoApi/oftenGoods.php').then(reponse=>{
-      console.log(reponse);
       this.oftenGoods=reponse.data;
     }).catch(error=>{
-      alert('网络错误，不能访问');
       console.log(error);
+      alert('网络错误，不能访问');
     });
     axios.get('http://jspang.com/DemoApi/typeGoods.php').then(reponse=>{
-      console.log(reponse);
       this.type0Goods=reponse.data[0];
       this.type1Goods=reponse.data[1];
       this.type2Goods=reponse.data[2];
@@ -168,7 +203,7 @@ padding: 10px;
   border: 1px solid #E5E9F2;
   background-color: #fff;
   float: left;
-
+  cursor: pointer;
 }
 .often_goods ul li span:nth-of-type(2){
   color: #58B7FF; 
@@ -190,6 +225,7 @@ padding: 10px;
   border:1px solid #E5E9F2;
   text-align: left;
   overflow: hidden;
+  cursor: pointer;
 }
 .goodclass .list li span{
   display: block;
@@ -205,5 +241,12 @@ padding: 10px;
 .goodclass .list li span:nth-of-type(2){
   margin: 10px 0 15px 0;
   color:brown;
+}
+.total{
+  padding: 20px;
+  border-bottom: 1px solid #D3DCE6;
+}
+.total span{
+  margin-right:20px;
 }
 </style>
