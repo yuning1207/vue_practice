@@ -10,5 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "yuning",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "webpack-dev-server": "^2.9.1"
+  }
 }
