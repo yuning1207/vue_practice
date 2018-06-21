@@ -1,40 +1,71 @@
 <template>
-  <div class="header">
-    <div class="line"></div>
-    <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-      <el-menu-item index="1">处理中心</el-menu-item>
-      <el-submenu index="2">
-        <template slot="title">我的工作台</template>
-        <el-menu-item index="2-1">选项1</el-menu-item>
-        <el-menu-item index="2-2">选项2</el-menu-item>
-        <el-menu-item index="2-3">选项3</el-menu-item>
-        <el-submenu index="2-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="2-4-1">选项1</el-menu-item>
-          <el-menu-item index="2-4-2">选项2</el-menu-item>
-          <el-menu-item index="2-4-3">选项3</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-menu-item index="3" disabled>消息中心</el-menu-item>
-      <el-menu-item index="4">
-        <a href="https://www.ele.me" target="_blank">订单管理</a>
-      </el-menu-item>
-    </el-menu>
-  </div>
+    <div class="header">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+            <span class="head">Coder YU</span>
+            <el-menu-item index="1">网站首页</el-menu-item>
+            <el-menu-item index="2">文章专栏</el-menu-item>
+            <el-menu-item index="3">生活点滴</el-menu-item>
+            <el-menu-item index="4">关于本站</el-menu-item>
+        </el-menu>
+    </div>
 </template>
 <script>
-    export default{
-       data() {
+export default {
+    data() {
         return {
-        activeIndex: '1',
-        activeIndex2: '1'
+            activeIndex: "1"
         };
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      }
+        handleSelect(key, keyPath) {
+            console.log(key, keyPath);
+        }
     },
-        name:'header0'
-    }
+    name: "header0"
+};
 </script>
+
+<style>
+.el-menu-item {
+    font-size: 18px;
+    display: inline-block;
+}
+.el-menu {
+    text-align: right;
+    padding-right: 20px;
+}
+.el-menu--horizontal > .el-menu-item {
+    float: none;
+    height: auto;
+    line-height: 25px;
+    padding: 15px 30px 15px 30px;
+}
+.head {
+    color: white;
+    font-size: 20px;
+    vertical-align: center;
+    left: 5%;
+    top: 30%;
+    position: absolute;
+    letter-spacing: 2px;
+}
+@media screen and (max-width: 426px) {
+    .el-menu--horizontal > .el-menu-item {
+        font-size: 14px;
+        padding: 5px;
+    }
+    .el-menu {
+        padding-right: 0px;
+    }
+    .head {
+        font-size: 14px;
+        top: 25%;
+    }
+}
+@media screen and (max-width: 376px) {
+    .el-menu--horizontal > .el-menu-item {
+        font-size: 12px;
+        padding: 3px;
+    }
+}
+</style>
