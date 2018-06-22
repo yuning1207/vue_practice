@@ -1,7 +1,7 @@
 <template>
     <div class="top">
-        <div id="fix_con" @click="fix_con">
-            <img src="../../../static/img/other.png">
+        <div id="fix_con">
+            <img src="../../../static/img/other.png" @click="fix_con">
         </div>
         <div id="fix_con_all">
             <a><img src="../../../static/img/QQspace.png"></a>
@@ -9,7 +9,7 @@
             <a><img src="../../../static/img/weixin.png"></a>
             <a><img src="../../../static/img/QQ.png"></a>
         </div>
-        <div id="fix_top"><img src="../../../static/img/top.png"></div>
+        <div id="fix_top"><img src="../../../static/img/top.png" @click="fix_top"></div>
     </div>
 </template>
 <script>
@@ -17,16 +17,22 @@ export default {
     name: "top",
     created: function() {
         global.tag = true;
-        console.log(tag);
         document.onmousedown = function(ev) {
-            var oEvent = ev || event; //IE浏览器直接使用event或者window.event得到事件本身。
+            console.log("created");
             if (
-                oEvent.button == 1 ||
-                oEvent.button == 2 ||
-                oEvent.button == 0
+                ev.target != fix_con &&
+                ev.target != fix_con.getElementsByTagName("img")[0]
             ) {
-                fix_con_all.style.right = "-200px";
-            } // IE下鼠标的 左键是1 ，  右键是2   ff和chrome下 鼠标左键是0  右键是2
+                var oEvent = ev || event; //IE浏览器直接使用event或者window.event得到事件本身。
+                if (
+                    oEvent.button == 1 ||
+                    oEvent.button == 2 ||
+                    oEvent.button == 0
+                ) {
+                    fix_con_all.style.right = "-200px";
+                    tag = !tag;
+                } // IE下鼠标的 左键是1 ，  右键是2   ff和chrome下 鼠标左键是0  右键是2
+            }
         };
         window.onscroll = function() {
             if (
@@ -45,15 +51,33 @@ export default {
     },
     methods: {
         fix_con: function() {
+            console.log("method");
             if (tag) {
                 fix_con_all.style.right = "70px";
                 tag = !tag;
-                console.log(tag);
             } else {
                 fix_con_all.style.right = "-200px";
                 tag = !tag;
-                console.log(tag);
             }
+        },
+        fix_top: function() {
+            var tops, speed;
+            var top0;
+            var timer;
+            timer = setInterval(function() {
+                tops =
+                    document.documentElement.scrollTop ||
+                    document.body.scrollTop;
+                speed = tops / 4;
+                document.documentElement.scrollTop = document.body.scrollTop =
+                    tops - speed;
+                top0 =
+                    document.documentElement.scrollTop ||
+                    document.body.scrollTop;
+                if (top0 == 0) {
+                    timer = clearInterval(timer);
+                }
+            }, 50);
         }
     }
 };
@@ -84,7 +108,11 @@ export default {
 .top img {
     margin: 10px;
 }
-
+#fix_con img,
+#fix_top img {
+    padding: 10px;
+    margin: 0;
+}
 #fix_con:hover,
 #fix_top:hover {
     opacity: 0.6;
