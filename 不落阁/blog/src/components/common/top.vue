@@ -18,7 +18,6 @@ export default {
     created: function() {
         global.tag = true;
         document.onmousedown = function(ev) {
-            console.log("created");
             if (
                 ev.target != fix_con &&
                 ev.target != fix_con.getElementsByTagName("img")[0]
@@ -51,7 +50,6 @@ export default {
     },
     methods: {
         fix_con: function() {
-            console.log("method");
             if (tag) {
                 fix_con_all.style.right = "70px";
                 tag = !tag;

@@ -1,7 +1,11 @@
 <template>
     <div class="header">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-            <span class="head">Coder YU</span>
+            <a>
+                <span class="head">
+                    Coder YU
+                </span>
+            </a>
             <el-menu-item index="1">网站首页</el-menu-item>
             <el-menu-item index="2">文章专栏</el-menu-item>
             <el-menu-item index="3">生活点滴</el-menu-item>
@@ -26,6 +30,9 @@ export default {
 </script>
 
 <style>
+a {
+    cursor: pointer;
+}
 .el-menu-item {
     font-size: 18px;
     display: inline-block;
