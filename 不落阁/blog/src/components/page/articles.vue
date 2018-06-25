@@ -191,6 +191,7 @@ export default {
 }
 #share_search {
     margin-bottom: 15px;
+    text-align: left;
 }
 
 #share_search div {
@@ -206,9 +207,9 @@ export default {
 #search_input input {
     width: 100%;
     height: 100%;
-    padding-left: 10px;
     border: 0;
     outline: 0;
+    padding-left: 10px;
 }
 
 #search_i:hover,
@@ -220,7 +221,9 @@ export default {
     width: 13%;
     float: right;
 }
-
+#search_i:hover > a {
+    color: #009688;
+}
 #search_i a {
     display: inline-block;
     width: 20px;
