@@ -1,20 +1,19 @@
 <template>
     <div class="header">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-            <a>
-                <span class="head">
-                    Coder YU
-                </span>
+            <a class="head">
+                Coder YU
             </a>
-            <el-menu-item index="1">网站首页</el-menu-item>
-            <el-menu-item index="2">文章专栏</el-menu-item>
-            <el-menu-item index="3">生活点滴</el-menu-item>
-            <el-menu-item index="4">关于本站</el-menu-item>
+            <el-menu-item index="1" @click="gohome">网站首页</el-menu-item>
+            <el-menu-item index="2" @click="goarticle">文章专栏</el-menu-item>
+            <el-menu-item index="3" @click="golife">生活点滴</el-menu-item>
+            <el-menu-item index="4" @click="goabout">关于本站</el-menu-item>
         </el-menu>
     </div>
 </template>
 <script>
 export default {
+    name: "header0",
     data() {
         return {
             activeIndex: "1"
@@ -22,10 +21,21 @@ export default {
     },
     methods: {
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
+            // console.log(key, keyPath);
+        },
+        gohome() {
+            this.$router.push("/");
+        },
+        goarticle() {
+            this.$router.push("/articles");
+        },
+        golife() {
+            this.$router.push("/life");
+        },
+        goabout() {
+            this.$router.push("/about");
         }
-    },
-    name: "header0"
+    }
 };
 </script>
 
@@ -49,10 +59,10 @@ a {
 }
 .head {
     color: white;
-    font-size: 20px;
+    font-size: 28px;
     vertical-align: center;
     left: 5%;
-    top: 30%;
+    top: 24%;
     position: absolute;
     letter-spacing: 2px;
 }

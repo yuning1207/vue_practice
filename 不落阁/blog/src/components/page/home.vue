@@ -6,35 +6,35 @@
             </el-carousel-item>
         </el-carousel>
         <el-row id="content">
-            <el-col :xs="24" :md="16">
-                <el-row class="article">
+            <el-col :xs="24" :md="17">
+                <el-row class="article" v-for="item in datalist" :key="item.id">
                     <el-col :span="6" class="img">
-                        <img src="../../../static/img/index_a_1.png" alt="[Welcome to .NET Core]ASP.NET Core中间件介绍">
+                        <img :src="'/api'+item.picture" :alt="item.title">
                     </el-col>
                     <el-col :span="17" class="con">
                         <div class="a_title">
-                            <img src="../../../static/img/is_top.png">
-                            <a>【Welcome to .NET Core】ASP.NET Core中间件介绍</a>
+                            <img v-if="item.isTop" src="../../../static/img/is_top.png">
+                            <a>{{item.title}}</a>
                         </div>
                         <div class="a_body">
-                            .NET Core入门系列第二篇。对ASP.NET Core的新模块——中间件做简单的介绍和实践。
+                            {{item.description}}
                         </div>
                     </el-col>
                     <div class="a_foot">
                         <span class="a_data">
-                            <i class="el-icon-time"></i>2017-08-30</span>
+                            <i class="el-icon-time"></i>{{item.date}}</span>
                         <span class="a_language">
                             <i class="el-icon-tickets"></i>
-                            <a>.NET Core</a>
+                            <a>{{item.mark}}</a>
                         </span>
                         <span class="a_comment">
-                            <i class="el-icon-edit"></i>566</span>
+                            <i class="el-icon-edit"></i>{{item.commentNum}}</span>
                         <span class="a_see">
-                            <i class="el-icon-view"></i>11</span>
+                            <i class="el-icon-view"></i>{{item.viewNum}}</span>
 
                     </div>
                 </el-row>
-                <el-pagination layout="prev, pager, next" :total="10">
+                <el-pagination layout="prev, pager, next" :total="pageinfo.totalPage*10" :page-size="10" @current-change="handleCurrentChange">
                 </el-pagination>
             </el-col>
             <el-col :xs="24" :md="7" class="right">
@@ -66,9 +66,9 @@
                 <div id="hot_text">
                     <p class="right_head">热文排行</p>
                     <hr>
-                    <p>
+                    <p v-for="item in listhot" :key="item.id">
                         <i class="fa fa-hand-o-right"></i>
-                        <a>一步步制作时光轴（一）（HTML篇）</a>
+                        <a>{{item.title}}</a>
                     </p>
                 </div>
                 <div id="time_go">
@@ -96,16 +96,42 @@
 import axios from "axios";
 export default {
     name: "home",
-    // data(){
-    //     return {
-    //         datalist=[]
-    //     }
-    // },
+    data() {
+        return {
+            datalist: [],
+            pageinfo: {},
+            listhot: []
+        };
+    },
     created: function() {
-        console.log(1);
-        axios.get("/Blog/listAll/1").then(response => {
-            console.log(1);
+        axios
+            .get("/api/Blog/listAll/1")
+            .then(response => {
+                if (response.data.status == 0) {
+                    this.datalist = response.data.data.list;
+                    this.pageinfo = response.data.data.pageInfo;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("网络错误，不能访问");
+            });
+        axios.get("/api/Blog/listHot").then(response => {
+            if (response.data.status == 0) {
+                this.listhot = response.data.data;
+            }
         });
+    },
+    methods: {
+        handleCurrentChange(val) {
+            axios.get("/api/Blog/listAll/" + val).then(response => {
+                if (response.data.status == 0) {
+                    this.datalist = response.data.data.list;
+                    this.pageinfo = response.data.data.pageInfo;
+                }
+            });
+            document.body.scrollTop = document.documentElement.scrollTop = 300;
+        }
     }
 };
 </script>
@@ -146,7 +172,7 @@ export default {
     padding: 10px 0;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
     background-color: white;
-    margin: 15px 0;
+    margin: 20px 0;
     border-left: 5px solid transparent;
     transition: all 0.2s ease-in-out;
     -webkit-transition: all 0.2s ease-in-out;
@@ -159,6 +185,7 @@ export default {
 }
 .img img {
     width: 100%;
+    margin: 0 10px;
 }
 .article:hover {
     border-left-color: #009688;
@@ -167,7 +194,8 @@ export default {
     padding-left: 30px;
 }
 .a_title {
-    margin: 15px 0;
+    margin: 15px 0 10px;
+    text-align: left;
 }
 .a_title img {
     margin-bottom: 4px;
@@ -177,6 +205,7 @@ export default {
     color: black;
     font-size: 18px;
     vertical-align: super;
+    font-weight: bold;
 }
 .a_title a:hover {
     text-decoration: none;
@@ -186,6 +215,8 @@ export default {
     text-indent: 2em;
     margin-bottom: 10px;
     text-align: left;
+    font-size: 14px;
+    line-height: 22px;
 }
 .a_foot .a_data,
 .a_foot .a_language {
@@ -216,9 +247,12 @@ export default {
 .a_foot i {
     margin-right: 7px;
 }
+.el-pagination {
+    padding: 15px 0 30px 0;
+}
 /* 右边 */
 .right {
-    margin: 15px 0;
+    margin: 20px 0;
 }
 
 #index_info {
