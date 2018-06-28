@@ -7,6 +7,7 @@ import elementui from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import $ from 'jquery'
 import 'font-awesome/css/font-awesome.min.css'
+import store from '../src/vuex/store'
 
 Vue.config.productionTip = false
 Vue.use(elementui)

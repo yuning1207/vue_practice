@@ -7,6 +7,7 @@
         </el-carousel>
         <el-row id="content">
             <el-col :xs="24" :md="17">
+                <div id="wait">等待中...</div>
                 <el-row class="article" v-for="item in datalist" :key="item.id">
                     <el-col :span="6" class="img">
                         <img :src="'/api'+item.picture" :alt="item.title">
@@ -93,44 +94,71 @@
 </template>
 
 <script>
-import axios from "axios";
+import store from "@/vuex/store";
+import { mapMutations, mapState } from "vuex";
 export default {
     name: "home",
     data() {
-        return {
-            datalist: [],
-            pageinfo: {},
-            listhot: []
-        };
+        return {};
     },
-    created: function() {
-        axios
-            .get("/api/Blog/listAll/1")
-            .then(response => {
-                if (response.data.status == 0) {
-                    this.datalist = response.data.data.list;
-                    this.pageinfo = response.data.data.pageInfo;
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                alert("网络错误，不能访问");
+    store,
+    computed: {
+        ...mapState(["datalist"]),
+        ...mapState(["pageinfo"]),
+        ...mapState(["listhot"])
+    },
+    mounted: function() {
+        $(".el-menu-item")
+            .eq(0)
+            .css({
+                color: "rgb(255, 208, 75)",
+                borderBottomColor: "rgb(255, 208, 75)",
+                backgroundColor: "rgb(84, 92, 100)"
             });
-        axios.get("/api/Blog/listHot").then(response => {
-            if (response.data.status == 0) {
-                this.listhot = response.data.data;
-            }
-        });
+        $(".el-menu-item")
+            .eq(1)
+            .css({
+                color: "rgb(255, 255, 255)",
+                borderBottomColor: "transparent",
+                backgroundColor: "rgb(84, 92, 100)"
+            });
+        $(".el-menu-item")
+            .eq(2)
+            .css({
+                color: "rgb(255, 255, 255)",
+                borderBottomColor: "transparent",
+                backgroundColor: "rgb(84, 92, 100)"
+            });
+        $(".el-menu-item")
+            .eq(3)
+            .css({
+                color: "rgb(255, 255, 255)",
+                borderBottomColor: "transparent",
+                backgroundColor: "rgb(84, 92, 100)"
+            });
+        if (this.datalist.length == 2) {
+            $("#wait")[0].style.display = "none";
+            $(".el-pagination")[0].style.display = "block";
+            this.$store.dispatch("setMutation");
+        } else if (this.datalist.length == 0) {
+            this.$store.dispatch("setMutation");
+        } else if (this.datalist.length == 10) {
+            $("#wait")[0].style.display = "none";
+            $(".el-pagination")[0].style.display = "block";
+        }
+    },
+    created: function() {},
+    updated: function() {},
+    watch: {
+        datalist: function() {
+            $(".el-pagination")[0].style.display = "block";
+            $("#wait")[0].style.display = "none";
+            document.body.scrollTop = document.documentElement.scrollTop = 300;
+        }
     },
     methods: {
         handleCurrentChange(val) {
-            axios.get("/api/Blog/listAll/" + val).then(response => {
-                if (response.data.status == 0) {
-                    this.datalist = response.data.data.list;
-                    this.pageinfo = response.data.data.pageInfo;
-                }
-            });
-            document.body.scrollTop = document.documentElement.scrollTop = 300;
+            this.$store.dispatch("setMutation", val);
         }
     }
 };
@@ -249,6 +277,7 @@ export default {
 }
 .el-pagination {
     padding: 15px 0 30px 0;
+    display: none;
 }
 /* 右边 */
 .right {

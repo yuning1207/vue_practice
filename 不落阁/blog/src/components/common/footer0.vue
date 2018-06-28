@@ -17,6 +17,7 @@ export default {
     padding: 15px 0;
     bottom: 0;
     width: 100%;
+    text-align: center;
 }
 .footer0 {
     bottom: 0;

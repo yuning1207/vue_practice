@@ -9,34 +9,35 @@
                 </p>
             </div>
             <el-col :xs="24" :md="17">
-                <el-row class="articles">
+                <div id="wait">等待中...</div>
+                <el-row class="articles" v-for="item in datalist" :key="item.id">
                     <el-col :span="6" class="img">
-                        <img src="../../../static/img/index_a_1.png" alt="[Welcome to .NET Core]ASP.NET Core中间件介绍">
+                        <img :src="'/api'+item.picture" :alt="item.title">
                     </el-col>
                     <el-col :span="17" class="con">
                         <div class="a_title">
-                            <img src="../../../static/img/is_top.png">
-                            <a>[Welcome to .NET Core]ASP.NET Core中间件介绍</a>
+                            <img v-if="item.isTop" src="../../../static/img/is_top.png">
+                            <a>{{item.title}}</a>
                         </div>
                         <div class="a_body">
-                            .NET Core入门系列第二篇。对ASP.NET Core的新模块——中间件做简单的介绍和实践。
+                            {{item.description}}
                         </div>
                     </el-col>
                     <div class="a_foot">
                         <span class="a_data">
-                            <i class="el-icon-time"></i>2017-08-30</span>
+                            <i class="el-icon-time"></i>{{item.date}}</span>
                         <span class="a_language">
                             <i class="el-icon-tickets"></i>
-                            <a>.js</a>
+                            <a>{{item.mark}}</a>
                         </span>
                         <span class="a_comment">
-                            <i class="el-icon-edit"></i>566</span>
+                            <i class="el-icon-edit"></i>{{item.commentNum}}</span>
                         <span class="a_see">
-                            <i class="el-icon-view"></i>11</span>
+                            <i class="el-icon-view"></i>{{item.viewNum}}</span>
 
                     </div>
                 </el-row>
-                <el-pagination layout="prev, pager, next" :page-size="10">
+                <el-pagination layout="prev, pager, next" :total="pageinfo.totalPage*10" :page-size="10" @current-change="handleCurrentChange">
                 </el-pagination>
             </el-col>
             <el-col :xs="24" :md="7" id="articles_right">
@@ -67,11 +68,14 @@
                     <div id="auther_tell" class="col-xs-6 col-md-12">
                         <p class="right_head">作者推荐</p>
                         <hr>
-                        <p>
+                        <p v-for="item in listhot" :key="item.id">
                             <i class="fa fa-hand-o-right"></i>
-                            <a>【Welcome to .NET Core】ASP.NET Core中间件介绍</a>
+                            <a>{{item.title}}</a>
                         </p>
                     </div>
+                </div>
+                <div id="right_guide" @click="right_guide">
+                    <i class="fa fa-chevron-left"></i>
                 </div>
             </el-col>
         </el-row>
@@ -79,8 +83,106 @@
 </template>
 
 <script>
+import store from "@/vuex/store";
+import { mapMutations, mapState } from "vuex";
 export default {
-    name: "articles"
+    name: "articles",
+    data() {
+        return {};
+    },
+    store,
+    computed: {
+        ...mapState(["datalist"]),
+        ...mapState(["pageinfo"]),
+        ...mapState(["listhot"])
+    },
+    mounted: function() {
+        $(".el-menu-item")
+            .eq(1)
+            .css({
+                color: "rgb(255, 208, 75)",
+                borderBottomColor: "rgb(255, 208, 75)",
+                backgroundColor: "rgb(84, 92, 100)"
+            });
+        $(".el-menu-item")
+            .eq(0)
+            .css({
+                color: "rgb(255, 255, 255)",
+                borderBottomColor: "transparent",
+                backgroundColor: "rgb(84, 92, 100)"
+            });
+        $(".el-menu-item")
+            .eq(2)
+            .css({
+                color: "rgb(255, 255, 255)",
+                borderBottomColor: "transparent",
+                backgroundColor: "rgb(84, 92, 100)"
+            });
+        $(".el-menu-item")
+            .eq(3)
+            .css({
+                color: "rgb(255, 255, 255)",
+                borderBottomColor: "transparent",
+                backgroundColor: "rgb(84, 92, 100)"
+            });
+        if (this.datalist.length == 2) {
+            $("#wait")[0].style.display = "none";
+            $(".el-pagination")[0].style.display = "block";
+            this.$store.dispatch("setMutation");
+        } else if (this.datalist.length == 0) {
+            this.$store.dispatch("setMutation");
+        } else if (this.datalist.length == 10) {
+            $("#wait")[0].style.display = "none";
+            $(".el-pagination")[0].style.display = "block";
+        }
+    },
+    created: function() {
+        console.log("created");
+    },
+    methods: {
+        right_guide: function() {
+            let right_guide = $("#right_guide")[0];
+            let share_guide = $("#share_guide")[0];
+            let arr = $("#share_guide")
+                .find("*")
+                .splice(0, 10);
+            let right = share_guide.style.right;
+            share_guide.style.right = "0";
+            right_guide.style.display = "none";
+            document.onmousedown = function(ev) {
+                var oeven = ev || event;
+                if (
+                    oeven.button == 1 ||
+                    oeven.button == 0 ||
+                    oeven.button == 2
+                ) {
+                    if (oeven.target != share_guide) {
+                        var ar = Array.from(arr);
+                        var i = 0;
+                        for (let item of ar) {
+                            if (oeven.target != item) {
+                                i++;
+                            }
+                        }
+                        if (i != 9) {
+                            share_guide.style.right = "" + right;
+                            right_guide.style.display = "block";
+                        }
+                    }
+                }
+            };
+        },
+        handleCurrentChange(val) {
+            this.$store.dispatch("setMutation", val);
+        }
+    },
+    watch: {
+        datalist: function() {
+            $(".el-pagination")[0].style.display = "block";
+            $("#wait")[0].style.display = "none";
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        }
+    }
 };
 </script>
 
@@ -116,6 +218,9 @@ export default {
     -webkit-transition: all 0.2s ease-in-out;
     margin-right: 36px;
     text-align: left;
+}
+#articles > .articles {
+    margin-right: 0;
 }
 .articles:hover {
     border-left-color: #009688;
@@ -184,6 +289,7 @@ export default {
 }
 .el-pagination {
     padding: 15px 0 30px 0;
+    display: none;
 }
 /* 右边 */
 #articles_right {
@@ -201,7 +307,8 @@ export default {
 }
 
 #search_input {
-    width: 85%;
+    width: 80%;
+    padding-left: 10px;
 }
 
 #search_input input {
@@ -209,12 +316,13 @@ export default {
     height: 100%;
     border: 0;
     outline: 0;
-    padding-left: 10px;
 }
 
-#search_i:hover,
-#search_input:hover {
+#search_i:hover {
     border: 1px solid #ccc;
+}
+#search_input:hover {
+    outline: 1px solid #ccc;
 }
 
 #search_i {
@@ -228,7 +336,7 @@ export default {
     display: inline-block;
     width: 20px;
     height: 20px;
-    margin: 8px 30%;
+    margin: 8px 32%;
 }
 
 #share_guide,
@@ -257,8 +365,9 @@ export default {
     margin-right: 5px;
     border: 1px solid #ccc;
     color: black;
-    width: 47%;
+    width: 40%;
     padding: 8px;
+    font-size: 14px;
 }
 
 #guide_con a:hover {
@@ -266,12 +375,22 @@ export default {
     text-decoration: none;
     border-color: #5fb878;
 }
-
+hr {
+    border: none;
+    height: 1px;
+    background-color: #009688;
+    margin: 10px 0;
+}
+#auther_tell {
+    text-align: left;
+}
 #auther_tell i {
-    margin-right: 8px;
     color: #009688;
 }
-
+#auther_tell a {
+    font-size: 14px;
+    line-height: 20px;
+}
 #right_guide {
     display: none;
 }
@@ -280,6 +399,72 @@ export default {
 #fix_con_all,
 #fix_top {
     z-index: 2;
+}
+@media screen and (max-width: 991px) {
+    .articles {
+        margin-right: 0;
+    }
+    #share_search {
+        display: none;
+    }
+    #share_guide {
+        display: block;
+        position: fixed;
+        background-color: #393d49;
+        top: 53px;
+        height: 92vh;
+        width: 28vw;
+        right: -31vw;
+        color: white;
+        transition: all 0.2s ease-in-out;
+        -webkit-transition: all 0.2s ease-in-out;
+    }
+    #share_guide p {
+        font-size: 15px;
+    }
+    #guide_con a {
+        background-color: #009688;
+        color: white;
+        font-size: 13px;
+        padding-left: 0;
+        padding-right: 0;
+        border: 0;
+    }
+    #guide_con a:hover {
+        color: white;
+        background-color: #5fb878;
+    }
+    #right_guide {
+        display: block;
+        position: fixed;
+        right: 0;
+        top: 40%;
+        width: 15px;
+        height: 75px;
+        background-color: #009688;
+        color: white;
+        text-align: center;
+    }
+    #right_guide i {
+        margin-top: 30px;
+    }
+    #right_guide:hover {
+        color: #ddd;
+    }
+}
+
+@media screen and (max-width: 426px) {
+    #guide_con a {
+        width: 80%;
+    }
+    #share_guide {
+        right: -33vw;
+    }
+}
+@media screen and (max-width: 376px) {
+    #share_guide {
+        right: -34vw;
+    }
 }
 </style>
 
