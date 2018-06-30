@@ -284,6 +284,7 @@ p {
     background-color: white;
     margin: 10px auto 20px auto;
     padding: 0;
+    padding-bottom: 40px;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
 }
 

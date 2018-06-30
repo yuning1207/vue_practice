@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="./jquery-sinaEmotion-2.1.0.min.css">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div class="face_box">
+    <div id="feeling" class="textarea face_content" placeholder="说点儿什么吧" contenteditable="true"></div>
+    <div>
+      <a class="face">
+        <span></span>
+        <p>添加表情</p>
+      </a>
+      <button type="button" id="publish" onclick="publish()">发表</button>
+      <FCKeditorV2:FCKeditor ID="FCKeditor2" runat="server"> gg</FCKeditorV2:FCKeditor>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="./jquery.min.js"></script>
+  <script type="text/javascript" src="./jquery-sinaEmotion-2.1.0.min.js"></script>
+  <script type="text/javascript">
+    $(document).on("click", ".face", function (event) { //添加表情那个链接的class名用来当做点击的触发事件
+      if (!$('#sinaEmotion').is(':visible')) { //这句不用管，有兴趣可以看js源代码里
+        var facebox = $(this).parents(".face_box").find(".face_content"); //定义facebox是用来装表情的div框框
+        $(this).sinaEmotion(facebox); //把表情放到上面定义的容器框框里
+      }
+    });
+
+  </script>
+</body>
+
+</html>

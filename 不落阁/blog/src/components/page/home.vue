@@ -166,9 +166,9 @@ export default {
 
 <style>
 /* 轮播图 */
-.home {
+/* .home {
     background-color: #e2e2e2;
-}
+} */
 .el-carousel__item h1 {
     color: #475669;
     opacity: 0.75;

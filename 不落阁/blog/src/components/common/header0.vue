@@ -48,6 +48,7 @@ a {
     display: inline-block;
 }
 .el-menu {
+    /* background-color: #393d49; */
     text-align: right;
     padding-right: 20px;
 }

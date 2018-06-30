@@ -189,7 +189,7 @@ export default {
 <style>
 /* 整体 */
 .articles_con {
-    background-color: #e2e2e2;
+    /* background-color: #e2e2e2; */
     padding: 20px 0;
 }
 #articles {
