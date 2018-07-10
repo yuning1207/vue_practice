@@ -2,7 +2,7 @@
     <div class="articles_con">
         <el-row id="articles">
             <div class="articles">
-                <p class="con_pre">
+                <p class="article_pre">
                     <a>网站首页</a>
                     <i class="fa fa-lg fa-angle-right"></i>
                     <span>文章专栏</span>
@@ -17,7 +17,7 @@
                     <el-col :span="17" class="con">
                         <div class="a_title">
                             <img v-if="item.isTop" src="../../../static/img/is_top.png">
-                            <a>{{item.title}}</a>
+                            <a @click="getwiki(item.id)">{{item.title}}</a>
                         </div>
                         <div class="a_body">
                             {{item.description}}
@@ -55,13 +55,7 @@
                     <p>分类导航</p>
                     <hr>
                     <div id="guide_con">
-                        <a>ASP.NET MVC</a>
-                        <a>SQL Server</a>
-                        <a>Entity Framework</a>
-                        <a>Web前端</a>
-                        <a>C#基础</a>
-                        <a>杂文随笔</a>
-                        <a>.NET Core</a>
+                        <a v-for="item in guide" :key="item.id" @click="getguide(item)">{{item}}</a>
                     </div>
                 </div>
                 <div class="rows">
@@ -70,7 +64,7 @@
                         <hr>
                         <p v-for="item in listhot" :key="item.id">
                             <i class="fa fa-hand-o-right"></i>
-                            <a>{{item.title}}</a>
+                            <a @click="getwiki(item.id)">{{item.title}}</a>
                         </p>
                     </div>
                 </div>
@@ -84,11 +78,14 @@
 
 <script>
 import store from "@/vuex/store";
+import axios from "axios";
 import { mapMutations, mapState } from "vuex";
 export default {
     name: "articles",
     data() {
-        return {};
+        return {
+            guide: []
+        };
     },
     store,
     computed: {
@@ -125,21 +122,30 @@ export default {
                 borderBottomColor: "transparent",
                 backgroundColor: "rgb(84, 92, 100)"
             });
-        if (this.datalist.length == 2) {
+        if (this.pageinfo.currentPage == 1) {
             $("#wait")[0].style.display = "none";
             $(".el-pagination")[0].style.display = "block";
+        } else {
             this.$store.dispatch("setMutation");
-        } else if (this.datalist.length == 0) {
-            this.$store.dispatch("setMutation");
-        } else if (this.datalist.length == 10) {
-            $("#wait")[0].style.display = "none";
-            $(".el-pagination")[0].style.display = "block";
         }
     },
     created: function() {
-        console.log("created");
+        axios
+            .get("/api//Blog/wiki/cateGory")
+            .then(response => {
+                if (response.data.status == 0) {
+                    this.guide = response.data.data;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("articles 网络错误，无法连接");
+            });
     },
     methods: {
+        getguide: function(item) {
+            this.$store.dispatch("setMutation", [1, item]);
+        },
         right_guide: function() {
             let right_guide = $("#right_guide")[0];
             let share_guide = $("#share_guide")[0];
@@ -174,6 +180,10 @@ export default {
         },
         handleCurrentChange(val) {
             this.$store.dispatch("setMutation", val);
+        },
+        getwiki(id) {
+            console.log("home id: " + id);
+            this.$router.push({ name: "wiki", params: { wikid: id } });
         }
     },
     watch: {
@@ -196,14 +206,14 @@ export default {
     width: 85%;
     margin: 0 auto;
 }
-.con_pre {
+.article_pre {
     margin-left: 15px;
 }
-.con_pre a {
+.article_pre a {
     color: black;
     font-weight: bold;
 }
-.con_pre > a:hover {
+.article_pre > a:hover {
     color: #01aaed;
     text-decoration: none;
 }
@@ -257,6 +267,10 @@ export default {
     text-align: left;
     font-size: 14px;
     line-height: 22px;
+}
+.a_title,
+.a_body {
+    word-break: break-all;
 }
 .a_foot .a_data,
 .a_foot .a_language {

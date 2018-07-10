@@ -15,7 +15,7 @@
                     <el-col :span="17" class="con">
                         <div class="a_title">
                             <img v-if="item.isTop" src="../../../static/img/is_top.png">
-                            <a>{{item.title}}</a>
+                            <a @click="getwiki(item.id)">{{item.title}}</a>
                         </div>
                         <div class="a_body">
                             {{item.description}}
@@ -69,17 +69,17 @@
                     <hr>
                     <p v-for="item in listhot" :key="item.id">
                         <i class="fa fa-hand-o-right"></i>
-                        <a>{{item.title}}</a>
+                        <a @click="getwiki(item.id)">{{item.title}}</a>
                     </p>
                 </div>
                 <div id="time_go">
-                    <p class="right_head">一路走来</p>
+                    <p class="right_head ">一路走来</p>
                     <hr>
-                    <p class="go_date">2017年03月12日</p>
-                    <p class="go_con">新增留言回复功能！人人都可参与回复</p>
+                    <p class="go_date ">2017年03月12日</p>
+                    <p class="go_con ">新增留言回复功能！人人都可参与回复</p>
                 </div>
                 <div id="index_friend">
-                    <p class="right_head">友情链接</p>
+                    <p class="right_head ">友情链接</p>
                     <hr>
                     <a>西安邮电大学</a>
                     <a>PTA</a>
@@ -87,7 +87,7 @@
                     <a>SegmentFault</a>
                     <a>慕课网</a>
                 </div>
-                <div style="clear:both"></div>
+                <div style="clear:both "></div>
             </el-col>
         </el-row>
     </div>
@@ -136,15 +136,11 @@ export default {
                 borderBottomColor: "transparent",
                 backgroundColor: "rgb(84, 92, 100)"
             });
-        if (this.datalist.length == 2) {
+        if (this.pageinfo.currentPage == 1) {
             $("#wait")[0].style.display = "none";
             $(".el-pagination")[0].style.display = "block";
+        } else {
             this.$store.dispatch("setMutation");
-        } else if (this.datalist.length == 0) {
-            this.$store.dispatch("setMutation");
-        } else if (this.datalist.length == 10) {
-            $("#wait")[0].style.display = "none";
-            $(".el-pagination")[0].style.display = "block";
         }
     },
     created: function() {},
@@ -156,19 +152,20 @@ export default {
             document.body.scrollTop = document.documentElement.scrollTop = 300;
         }
     },
+
     methods: {
         handleCurrentChange(val) {
             this.$store.dispatch("setMutation", val);
+        },
+        getwiki(id) {
+            console.log("home id: " + id);
+            this.$router.push({ name: "wiki", params: { wikid: id } });
         }
     }
 };
 </script>
 
 <style>
-/* 轮播图 */
-/* .home {
-    background-color: #e2e2e2;
-} */
 .el-carousel__item h1 {
     color: #475669;
     opacity: 0.75;
@@ -245,6 +242,10 @@ export default {
     text-align: left;
     font-size: 14px;
     line-height: 22px;
+}
+.a_title,
+.a_body {
+    word-break: break-all;
 }
 .a_foot .a_data,
 .a_foot .a_language {

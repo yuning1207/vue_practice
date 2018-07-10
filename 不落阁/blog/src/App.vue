@@ -1,12 +1,12 @@
 <template>
-  <div id="app">
-    <header0></header0>
-    <div class="main">
-      <router-view/>
+    <div id="app">
+        <header0></header0>
+        <div class="main">
+            <router-view/>
+        </div>
+        <top></top>
+        <footer0></footer0>
     </div>
-    <top></top>
-    <footer0></footer0>
-  </div>
 </template>
 
 <script>
@@ -31,5 +31,11 @@ export default {
     text-align: center;
     color: #2c3e50;
     background-image: url("../static/img/bg.png");
+    position: relative;
+}
+.main {
+    min-height: 100vh;
+    font: 14px Helvetica Neue, Helvetica, PingFang SC, \5fae\8f6f\96c5\9ed1,
+        Tahoma, Arial, sans-serif;
 }
 </style>

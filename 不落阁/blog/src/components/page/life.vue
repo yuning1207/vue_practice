@@ -1,52 +1,36 @@
 <template>
     <div class="life" id="index_main">
-        <div class="con_pre">
+        <div class="life_pre">
             <p>
                 <a>网站首页</a>
                 <i class="fa fa-lg fa-angle-right"></i>生活点滴
             </p>
         </div>
-        <div id="con_head">
+        <div id="life_head">
             <span>
                 <a>时光轴</a>
             </span>
         </div>
         <el-row id="life_con">
             <el-col :span="2" id="life_guide">
-                <a @click="year1">2017</a>
-                <a @click="year2">2016</a>
-                <a @click="year3">2015</a>
-                <a @click="year4">2014</a>
+                <a v-for="item in year" :key="item.id" @click="yearto(item)">{{item}}</a>
             </el-col>
             <el-col :span="20" id="life_c">
-                <div id="_2017_c">
-                    <p class="life_year">2017</p>
-                    <el-row class="c_row">
+                <div id="_2017_c" v-for="item in year" :key="item.id">
+                    <p class="life_year">{{item}}</p>
+                    <el-row class="c_row" v-for="con in drip" :key="con.id">
                         <el-col class="row_left" :xs="24" :sm="4" :md="4">
-                            <span>10月26日 22:05</span>
+                            <span>{{con.date}}</span>
                         </el-col>
                         <div class="row_mid">
                             <i class="fa fa-dot-circle-o"></i>
                         </div>
                         <el-col class="row_right" :xs="24" :sm="18" :md="18">
-                            <p>
-                                扩展了一下laypage，增加了一个设置页容量的功能！演示地址在我的后台管理系统用到分页的地方，感觉js这门语言用起来很爽啊，可惜我不是搞前端的！</p>
-                        </el-col>
-                    </el-row>
-                    <el-row class="c_row">
-                        <el-col class="row_left" :xs="24" :sm="4" :md="4">
-                            <span>10月26日 22:05</span>
-                        </el-col>
-                        <div class="row_mid">
-                            <i class="fa fa-dot-circle-o"></i>
-                        </div>
-                        <el-col class="row_right" :xs="24" :sm="18" :md="18">
-                            <p>
-                                扩展了一下laypage，增加了一个设置页容量的功能！演示地址在我的后台管理系统用到分页的地方，感觉js这门语言用起来很爽啊，可惜我不是搞前端的！</p>
+                            <p>{{con.content}}</p>
                         </el-col>
                     </el-row>
                 </div>
-                <div id="_2016_c">
+                <!-- <div id="_2016_c">
                     <p class="life_year">2016</p>
                     <el-row class="c_row">
                         <el-col class="row_left" :xs="24" :sm="4" :md="4">
@@ -126,16 +110,26 @@
                                 扩展了一下laypage，增加了一个设置页容量的功能！演示地址在我的后台管理系统用到分页的地方，感觉js这门语言用起来很爽啊，可惜我不是搞前端的！</p>
                         </el-col>
                     </el-row>
-                </div>
+                </div> -->
             </el-col>
         </el-row>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: "life",
-    created: function() {},
+    data: function() {
+        return {
+            year: [],
+            drip: []
+        };
+    },
+    created: function() {
+        this.get();
+    },
     mounted: function() {
         $(".el-menu-item")
             .eq(0)
@@ -167,6 +161,24 @@ export default {
             });
     },
     methods: {
+        get: function() {
+            let url = "/api/Blog/note";
+            axios
+                .get(url)
+                .then(res => {
+                    if (res.data.status == 0) {
+                        let data_year = Array.from(res.data.data);
+                        this.drip = res.data.data;
+                        data_year.forEach((element, index) => {
+                            this.$set(this.year, index, element.year);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    console.log("life网络错误，不能访问");
+                });
+        },
         scroll: function(year) {
             let speed;
             let top0, top1, top2;
@@ -192,21 +204,14 @@ export default {
                 }
             }, 30);
         },
-        year1: function() {
-            let year1_c = $("#_2017_c")[0].offsetTop + 74;
-            this.$options.methods.scroll(year1_c);
-        },
-        year2: function() {
-            let year2_c = $("#_2016_c")[0].offsetTop + 74;
-            this.$options.methods.scroll(year2_c);
-        },
-        year3: function() {
-            let year3_c = $("#_2015_c")[0].offsetTop + 74;
-            this.$options.methods.scroll(year3_c);
-        },
-        year4: function() {
-            let year4_c = $("#_2014_c")[0].offsetTop + 74;
-            this.$options.methods.scroll(year4_c);
+        yearto: function(item) {
+            let year_p = Array.from($(".life_year"));
+            year_p.forEach((element, index) => {
+                if (item == element.innerHTML) {
+                    let year_c = element.offsetTop + 74;
+                    this.$options.methods.scroll(year_c);
+                }
+            });
         }
     }
 };
@@ -221,7 +226,7 @@ p {
     height: auto;
 }
 
-#index_main .con_pre {
+#index_main .life_pre {
     border-left: 5px solid transparent;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
     background-color: white;
@@ -229,34 +234,34 @@ p {
     margin: 15px auto 10px auto;
 }
 
-#index_main .con_pre:hover,
-#con_head:hover {
+#index_main .life_pre:hover,
+#life_head:hover {
     border-left-color: #009688;
 }
 
-.con_pre p {
+.life_pre p {
     padding: 8px 15px;
     color: #666;
     margin: 0;
     font-size: 16px;
 }
 
-.con_pre p a {
+.life_pre p a {
     color: black;
     font-weight: bold;
 }
 
-.con_pre p a:hover {
+.life_pre p a:hover {
     text-decoration: none;
     color: #01aaed;
 }
 
-.con_pre p i {
+.life_pre p i {
     margin: 0 8px;
     color: black;
 }
 
-#con_head {
+#life_head {
     background-color: white;
     width: 85%;
     height: auto;
@@ -268,14 +273,14 @@ p {
     border-bottom: 1px solid #5fb878;
 }
 
-#con_head span a {
+#life_head span a {
     padding: 10px 20px;
     color: white;
     background-color: #5fb878;
     font-size: 16px;
 }
 
-#con_head span a:hover {
+#life_head span a:hover {
     text-decoration: none;
 }
 

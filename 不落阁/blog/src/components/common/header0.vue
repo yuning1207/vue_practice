@@ -4,8 +4,8 @@
             <a class="head">
                 Coder YU
             </a>
-            <el-menu-item id="ning" index="1" @click="gohome">网站首页</el-menu-item>
-            <el-menu-item id="yu" index="2" @click="goarticle">文章专栏</el-menu-item>
+            <el-menu-item index="1" @click="gohome">网站首页</el-menu-item>
+            <el-menu-item index="2" @click="goarticle">文章专栏</el-menu-item>
             <el-menu-item index="3" @click="golife">生活点滴</el-menu-item>
             <el-menu-item index="4" @click="goabout">关于本站</el-menu-item>
         </el-menu>

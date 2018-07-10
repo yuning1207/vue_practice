@@ -11,6 +11,7 @@ import store from '../src/vuex/store'
 
 Vue.config.productionTip = false
 Vue.use(elementui)
+window.eventBus = new Vue()
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

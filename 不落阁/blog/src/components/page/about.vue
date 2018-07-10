@@ -90,7 +90,14 @@
                 <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="textarea">
                 </el-input>
                 <el-button type="primary" @click="talk_commit">提交留言</el-button>
-                <div id="talk_con">
+                <div id="talk_con" v-for="item in text" :key="item.id">
+                    <div><img src='../../../static/img/info.png'>
+                        <p>{{item.content}}
+                        </p>
+                        <p>—来自游客
+                            <span>{{item.id}}</span>{{item.date}}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,13 +105,17 @@
 </template>
 
 <script>
+const url = "/api/Blog/message";
+import axios from "axios";
+import Vue from "vue";
 export default {
     name: "about",
     data() {
         return {
+            // count: 1,
             textarea: "",
-            talk_name: "YuNing",
-            days: 1
+            text: []
+            // newtext: []
         };
     },
     mounted: function() {
@@ -142,18 +153,48 @@ export default {
         global.link4 = $("#con_head a").eq(3);
         global.c_head = $(".c_head");
     },
-    created() {},
+    created: function() {
+        this.get();
+    },
     methods: {
+        get: function() {
+            axios
+                .get(url)
+                .then(res => {
+                    console.log("get success");
+                    if (res.status == 200) {
+                        res.data.data.reverse();
+                        this.text = res.data.data;
+                        console.log(this.text);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    alert("about网络错误，无法连接");
+                });
+        },
         talk_commit: function() {
-            $("#talk_con").append(
-                "<div><img src='../../../static/img/info.png'><p>" +
-                    this.textarea +
-                    "</p><p>来自" +
-                    this.talk_name +
-                    " " +
-                    this.days +
-                    "天前</p></div>"
-            );
+            console.log(this.textarea);
+            let params = new URLSearchParams();
+            params.append("content", this.textarea);
+            axios.post(url, params).then(res => {
+                if (res.data.status == 0) {
+                    axios
+                        .get(url)
+                        .then(res => {
+                            console.log("get success");
+                            if (res.status == 200) {
+                                res.data.data.reverse();
+                                this.text = res.data.data;
+                                console.log(this.text);
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            alert("about网络错误，无法连接");
+                        });
+                }
+            });
         },
         scroll: function(year) {
             let speed;
@@ -365,12 +406,13 @@ p {
     float: right;
     margin: 5px 5% 15px 0;
 }
+
 #talk_con div {
     /* clear: both; */
     overflow: hidden;
-    margin: 10px auto;
+    margin: 15px auto;
     border: 1px solid #eee;
-    padding: 10px;
+    padding: 5px 10px;
     width: 90%;
     box-sizing: border-box;
 }
@@ -381,10 +423,17 @@ p {
 }
 #talk_con div p:nth-of-type(1) {
     margin: 5px 0 0 70px;
+    text-indent: 2em;
 }
 #talk_con div p:nth-of-type(2) {
     text-align: right;
     margin-top: 10px;
+    color: #999;
+    font-size: 12px;
+}
+#talk_con div p:nth-of-type(2) span {
+    color: #0094ff;
+    padding-right: 10px;
 }
 </style>
 

@@ -4,6 +4,7 @@ import home from '@/components/page/home'
 import articles from '@/components/page/articles'
 import life from '@/components/page/life'
 import about from '@/components/page/about'
+import wiki from '@/components/page/wiki'
 
 Vue.use(Router)
 
@@ -27,6 +28,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: about
+    },
+    {
+      path: '/wiki',
+      name: 'wiki',
+      component: wiki
     }
   ]
 })

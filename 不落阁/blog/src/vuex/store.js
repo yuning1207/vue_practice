@@ -24,11 +24,22 @@ const mutations = {
 const getters = {}
 const actions = {
   setMutation(context, val) {
-    if (val > 1) {
-      var url = '/api/Blog/listAll/' + val
+    val = val + ''
+    let val0 = val.split(",");
+    if (val0[1]) {
+      if (val0[0] > 1) {
+        var url = '/api/Blog/wiki/listAll/' + val0[0] + '?mark=' + val0[1]
+      } else {
+        url = '/api/Blog/wiki/listAll/1' + '?mark=' + val0[1];
+      }
     } else {
-      url = '/api/Blog/listAll/1'
+      if (val0[0] > 1) {
+        var url = '/api/Blog/wiki/listAll/' + val0[0];
+      } else {
+        url = '/api/Blog/wiki/listAll/1';
+      }
     }
+
 
     function getpage() {
       return axios.get(url)
@@ -44,7 +55,7 @@ const actions = {
     }
 
     function gethot() {
-      return axios.get('/api/Blog/listHot').then(res => {
+      return axios.get('/api/Blog/wiki/listHot').then(res => {
         if (res.data.status == 0) {
           context.commit('sethot', res.data);
         }
